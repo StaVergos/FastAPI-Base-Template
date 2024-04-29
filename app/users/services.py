@@ -31,3 +31,7 @@ def create_user(data: UserIn, db) -> User:
 
 def get_users(db):
     return db.query(User).all()
+
+
+def get_user_by_id(user_id: int, db) -> User:
+    return db.query(User).filter(User.id == user_id).first()
