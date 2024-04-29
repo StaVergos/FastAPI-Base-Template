@@ -42,3 +42,20 @@ class UserOut(BaseUser):
             ]
         }
     }
+
+
+class UserUpdate(BaseUser):
+    ...
+
+    model_config = {
+        "json_schema_extra": {
+            "examples": [
+                {
+                    "username": "test",
+                    "email": "test@test.com",
+                    "is_active": True,
+                    "is_superuser": False,
+                }
+            ]
+        }
+    }
