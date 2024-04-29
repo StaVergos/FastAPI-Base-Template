@@ -1,9 +1,10 @@
 from app.core.schemas import CustomModel
+from pydantic import EmailStr
 
 
 class BaseUser(CustomModel):
     username: str
-    email: str
+    email: EmailStr
     is_active: bool
     is_superuser: bool
 

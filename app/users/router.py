@@ -1,4 +1,5 @@
 from fastapi import APIRouter, Depends
+from pydantic import EmailStr
 
 from app.core.db import get_db
 from app.users.schemas import UserIn, UserOut
@@ -18,5 +19,5 @@ def get_users_route(db=Depends(get_db)) -> list[UserOut]:
 
 
 @router.get("/{email}", response_model=UserOut)
-def get_user_by_email_route(email: str, db=Depends(get_db)) -> UserOut:
+def get_user_by_email_route(email: EmailStr, db=Depends(get_db)) -> UserOut:
     return get_user_by_email(email, db)
