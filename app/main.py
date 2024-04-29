@@ -1,10 +1,13 @@
-from fastapi import FastAPI, Depends
-from typing_extensions import Annotated
-from app.core import config
+from fastapi import FastAPI
+
+from app.users.router import router as users_router
 
 app = FastAPI()
 
 
-@app.get("/")
-def info(settings: Annotated[config.Settings, Depends(config.get_settings)]):
-    return {"app_name": settings.app_name}
+@app.get("/healthcheck", include_in_schema=False)
+async def healthcheck() -> dict[str, str]:
+    return {"status": "ok"}
+
+
+app.include_router(users_router, prefix="/users", tags=["users"])
