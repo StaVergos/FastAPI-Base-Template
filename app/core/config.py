@@ -16,6 +16,11 @@ class GlobalConfig(BaseConfig):
     app_name: str = "App Name"
     DATABASE_URL: Optional[str] = None
     DB_FORCE_ROLL_BACK: bool = False
+    DB_USERNAME: str
+    DB_PASSWORD: str
+    DB_HOST: str
+    DB_PORT: int
+    DB_NAME: str
 
 
 class DevConfig(GlobalConfig):
