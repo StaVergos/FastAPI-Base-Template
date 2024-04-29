@@ -23,3 +23,7 @@ def create_user(data: UserIn, db) -> User:
         if isinstance(e, IntegrityError):
             raise Conflict(detail="User with this email already exists")
     return user
+
+
+def get_users(db):
+    return db.query(User).all()
