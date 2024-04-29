@@ -4,7 +4,7 @@ from app.core.db import Base
 
 
 class User(Base):
-    __tablename__ = "user"
+    __tablename__ = "users"
 
     id: Mapped[int] = mapped_column(primary_key=True, autoincrement=True, index=True)
     username: Mapped[str] = mapped_column(index=True)
