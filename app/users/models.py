@@ -1,12 +1,12 @@
-import datetime
-from sqlalchemy import DateTime
-from sqlalchemy.sql import func
 from sqlalchemy.orm import Mapped, mapped_column
 
-from app.core.db import Base
+from app.core.db import Base, TimestampMixin
+from sqlalchemy.orm import relationship
+
+from app.auth.models import Token
 
 
-class User(Base):
+class User(Base, TimestampMixin):
     __tablename__ = "users"
 
     id: Mapped[int] = mapped_column(primary_key=True, autoincrement=True, index=True)
@@ -15,9 +15,4 @@ class User(Base):
     hashed_password: Mapped[str] = mapped_column()
     is_active: Mapped[bool] = mapped_column()
     is_superuser: Mapped[bool] = mapped_column(default=False)
-    created_at: Mapped[datetime.datetime] = mapped_column(
-        DateTime(timezone=True), server_default=func.now()
-    )
-    updated_at: Mapped[datetime.datetime] = mapped_column(
-        DateTime(timezone=True), onupdate=func.now()
-    )
+    tokens: Mapped[list["Token"] | None] = relationship(back_populates="user")
