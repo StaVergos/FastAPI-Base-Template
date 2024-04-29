@@ -7,7 +7,10 @@ class DetailedHTTPException(HTTPException):
     STATUS_CODE = status.HTTP_500_INTERNAL_SERVER_ERROR
     DETAIL = "Server error"
 
-    def __init__(self, **kwargs: dict[str, Any]) -> None:
+    # make it so that detail can be changed by passing it as an argument to the constructor
+    def __init__(self, detail: Any = None, **kwargs: Any) -> None:
+        if detail is not None:
+            self.DETAIL = detail
         super().__init__(status_code=self.STATUS_CODE, detail=self.DETAIL, **kwargs)
 
 
@@ -31,3 +34,8 @@ class NotAuthenticated(DetailedHTTPException):
 
     def __init__(self) -> None:
         super().__init__(headers={"WWW-Authenticate": "Bearer"})
+
+
+class Conflict(DetailedHTTPException):
+    STATUS_CODE = status.HTTP_409_CONFLICT
+    DETAIL = "Conflict"
