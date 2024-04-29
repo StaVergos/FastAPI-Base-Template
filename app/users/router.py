@@ -5,6 +5,7 @@ from app.core.db import get_db
 from app.users.schemas import UserIn, UserOut, UserUpdate
 from app.users.services import (
     create_user,
+    delete_user,
     get_users,
     get_user_by_email,
     get_user_by_id,
@@ -37,3 +38,8 @@ def get_user_by_id_route(user_id: int, db=Depends(get_db)) -> UserOut:
 @router.patch("/{user_id}", response_model=UserOut)
 def update_user_route(user_id: int, data: UserUpdate, db=Depends(get_db)) -> UserOut:
     return update_user(user_id, data, db)
+
+
+@router.delete("/{user_id}", status_code=status.HTTP_204_NO_CONTENT)
+def delete_user_route(user_id: int, db=Depends(get_db)) -> None:
+    return delete_user(user_id, db)
