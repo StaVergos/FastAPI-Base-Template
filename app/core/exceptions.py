@@ -7,7 +7,6 @@ class DetailedHTTPException(HTTPException):
     STATUS_CODE = status.HTTP_500_INTERNAL_SERVER_ERROR
     DETAIL = "Server error"
 
-    # make it so that detail can be changed by passing it as an argument to the constructor
     def __init__(self, detail: Any = None, **kwargs: Any) -> None:
         if detail is not None:
             self.DETAIL = detail
