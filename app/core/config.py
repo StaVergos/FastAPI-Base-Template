@@ -21,6 +21,9 @@ class GlobalConfig(BaseConfig):
 class DevConfig(GlobalConfig):
     app_name: str = "Dev App"
     model_config = SettingsConfigDict(env_prefix="DEV_")
+    CORS_ORIGINS: list[str]
+    CORS_ORIGINS_REGEX: str | None = None
+    CORS_HEADERS: list[str]
 
 
 class ProdConfig(GlobalConfig):
