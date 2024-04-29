@@ -5,6 +5,10 @@ from app.users.schemas import UserIn
 from app.users.models import User
 
 
+def get_user_by_email(email: str, db) -> User:
+    return db.query(User).filter(User.email == email).first()
+
+
 def create_user(data: UserIn, db) -> User:
     password = data.password
     hashed_password = "fakehashed_" + password

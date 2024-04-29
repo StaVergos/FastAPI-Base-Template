@@ -2,7 +2,7 @@ from fastapi import APIRouter, Depends
 
 from app.core.db import get_db
 from app.users.schemas import UserIn, UserOut
-from app.users.services import create_user, get_users
+from app.users.services import create_user, get_users, get_user_by_email
 
 router = APIRouter()
 
@@ -15,3 +15,8 @@ def create_user_route(data: UserIn, db=Depends(get_db)) -> UserOut:
 @router.get("/", response_model=list[UserOut])
 def get_users_route(db=Depends(get_db)) -> list[UserOut]:
     return get_users(db)
+
+
+@router.get("/{email}", response_model=UserOut)
+def get_user_by_email_route(email: str, db=Depends(get_db)) -> UserOut:
+    return get_user_by_email(email, db)
