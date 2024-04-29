@@ -1,6 +1,7 @@
 from sqlalchemy.exc import IntegrityError
 from pydantic import EmailStr
 
+from app.auth.security import get_password_hash
 from app.core.exceptions import Conflict, NotFound
 from app.users.schemas import UserIn
 from app.users.models import User
@@ -15,7 +16,7 @@ def get_user_by_email(email: EmailStr, db) -> User:
 
 def create_user(data: UserIn, db) -> User:
     password = data.password
-    hashed_password = "fakehashed_" + password
+    hashed_password = get_password_hash(password)
     user = User(
         username=data.username,
         email=data.email,
