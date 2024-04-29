@@ -13,6 +13,9 @@ def convert_datetime_to_gmt(dt: datetime) -> str:
 
 class CustomModel(BaseModel):
     model_config = ConfigDict(
+        extra="forbid",
+        from_attributes=True,
         json_encoders={datetime: convert_datetime_to_gmt},
         populate_by_name=True,
+        use_enum_values=True,
     )
