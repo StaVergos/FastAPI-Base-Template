@@ -10,4 +10,4 @@ async def healthcheck() -> dict[str, str]:
     return {"status": "ok"}
 
 
-app.include_router(users_router, prefix="/users", tags=["users"])
+app.include_router(users_router, prefix="/v1/users", tags=["users"])
