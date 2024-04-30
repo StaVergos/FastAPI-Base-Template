@@ -9,7 +9,7 @@ class AuthConfig(BaseConfig):
     SECRET_KEY: str
     HASHING_ALGORITHM: str
     ACCESS_TOKEN_EXPIRE_MINUTES: int
+    ACCESS_TOKEN_USER_LIMIT: int
 
 
-def get_auth_config():
-    return AuthConfig()
+config = AuthConfig()

@@ -3,6 +3,7 @@ from starlette.middleware.cors import CORSMiddleware
 
 from app.core.config import config
 from app.users.router import router as users_router
+from app.auth.router import router as auth_router
 
 app = FastAPI()
 
@@ -22,3 +23,4 @@ async def healthcheck() -> dict[str, str]:
 
 
 app.include_router(users_router, prefix="/v1/users", tags=["users"])
+app.include_router(auth_router, prefix="/v1/auth", tags=["auth"])

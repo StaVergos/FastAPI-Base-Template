@@ -35,6 +35,11 @@ class NotAuthenticated(DetailedHTTPException):
         super().__init__(headers={"WWW-Authenticate": "Bearer"})
 
 
+class Forbidden(DetailedHTTPException):
+    STATUS_CODE = status.HTTP_403_FORBIDDEN
+    DETAIL = "Forbidden"
+
+
 class Conflict(DetailedHTTPException):
     STATUS_CODE = status.HTTP_409_CONFLICT
     DETAIL = "Conflict"
