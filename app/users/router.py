@@ -2,6 +2,7 @@ from fastapi import APIRouter, Depends, status
 from pydantic import EmailStr
 
 from app.core.db import get_db
+from app.auth.security import get_user_id_from_token
 from app.users.schemas import UserIn, UserOut, UserUpdate
 from app.users.services import (
     create_user,
@@ -13,6 +14,13 @@ from app.users.services import (
 )
 
 router = APIRouter()
+
+
+@router.get("/me", response_model=UserOut)
+def read_current_user(
+    user_id: int = Depends(get_user_id_from_token), db=Depends(get_db)
+):
+    return get_user_by_id(user_id, db)
 
 
 @router.post("/", response_model=UserOut, status_code=status.HTTP_201_CREATED)
