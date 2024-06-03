@@ -13,6 +13,7 @@ from jose import jwt, JWTError
 from app.auth.models import Token
 from app.auth.config import config
 from app.core.exceptions import NotAuthenticated
+from sqlalchemy.orm import Session
 
 oauth2_scheme = OAuth2PasswordBearer(tokenUrl="auth/token")
 
@@ -64,37 +65,38 @@ def decode_access_token(token: str) -> dict:
 
 
 class JWTBearer(HTTPBearer):
-    def __init__(self, auto_error: bool = True):
-        super(JWTBearer, self).__init__(auto_error=auto_error)
-
     async def __call__(self, request: Request):
         credentials: HTTPAuthorizationCredentials = await super(
             JWTBearer, self
         ).__call__(request)
-        if credentials:
-            print(credentials)
-            if not credentials.scheme == "Bearer":
-                raise HTTPException(
-                    status_code=403, detail="Invalid authentication scheme."
-                )
-            if not self.verify_jwt(credentials.credentials):
-                raise HTTPException(
-                    status_code=403, detail="Invalid token or expired token."
-                )
+        if credentials and decode_access_token(credentials.credentials):
             return credentials.credentials
         else:
-            raise HTTPException(status_code=403, detail="Invalid authorization code.")
+            raise HTTPException(status_code=401, detail="Unauthorized")
 
-    def verify_jwt(self, jwtoken: str) -> bool:
-        isTokenValid: bool = False
-
+    def verify_jwt(self, jwtoken: str, db: Session) -> bool:
         try:
             payload = decode_access_token(jwtoken)
         except JWTError:
-            payload = None
-        if payload:
-            isTokenValid = True
-        return isTokenValid
+            return False
+
+        token_id = payload.get("token_id")
+        user_id = payload.get("user_id")
+
+        token = (
+            db.query(Token)
+            .filter((Token.id == token_id) | (Token.user_id == user_id))
+            .first()
+        )
+
+        if token and token.expiry > datetime.datetime.now(datetime.timezone.utc):
+            return True
+
+        return False
+
+
+def get_user_token(incoming_token: str = Depends(JWTBearer())):
+    return incoming_token
 
 
 def get_user_id_from_token(incoming_token: str = Depends(JWTBearer())):
